@@ -81,13 +81,13 @@ exports.getAllPosts = async (req, res) => {
 
 // update post
 exports.updatePostById = async (req, res) => {
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.post._id);
   if (!post) {
     return res.status(404).json('No such post found!');
   }
   try {
     const updatedPost = await Post.findByIdAndUpdate(
-      req.params.id,
+      req.post._id,
       {
         $set: req.body,
       },
@@ -104,11 +104,14 @@ exports.updatePostById = async (req, res) => {
 
 // delete post
 exports.deletePostById = async (req, res) => {
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.post._id);
   if (!post) return res.status(404).json('No such post found!');
   try {
-    await post.delete();
-    res.status(200).json('Post has been deleted!');
+    await post.deleteOne();
+    res.status(200).json({
+      status: true,
+      message: `Successfully deleted the post`,
+    });
   } catch (error) {
     res.status(500).json({
       status: false,
