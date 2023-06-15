@@ -12,12 +12,14 @@ exports.register = async (req, res) => {
   }
   try {
     const user = await User.findOne({ email });
+
     if (user) {
       return res.status(400).json({
         status: false,
         error: 'User exists!',
       });
     }
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -28,9 +30,15 @@ exports.register = async (req, res) => {
     });
 
     await newUser.save();
-    res.status(200).json('User registered successfully!');
+    res.status(201).json({
+      sucess: true,
+      message: 'User registered successfully!',
+    });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({
+      status: false,
+      error,
+    });
   }
 };
 
@@ -39,7 +47,7 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      return res.status(400).json({
+      return res.status(401).json({
         status: false,
         error: `User doesnt't exists!`,
       });
@@ -47,17 +55,28 @@ exports.login = async (req, res) => {
 
     const validate = await bcrypt.compare(req.body.password, user.password);
     if (!validate) {
-      return res.status(400).json({
+      return res.status(401).json({
         status: false,
         error: `Wrong credentials!`,
       });
     }
 
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '1d',
+    });
 
     const { password, ...others } = user._doc;
-    res.status(200).json({ ...others, token });
+
+    res.status(200).json({
+      success: true,
+      message: 'Login Successful!',
+      data: { ...others, token },
+    });
   } catch (error) {
-    res.status(500).json(error);
+    console.log(error);
+    res.status(500).json({
+      status: false,
+      error: 'Internal server error',
+    });
   }
 };
