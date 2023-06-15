@@ -5,6 +5,7 @@ const {
   createPost,
   updatePostById,
   deletePostById,
+  getPost,
 } = require('../controllers/posts');
 const { getUserById } = require('../controllers/users');
 const {
@@ -15,11 +16,11 @@ const {
 router.param('postId', getPostById);
 router.param('userId', getUserById);
 
-// get a post
-router.get('/:postId', getPostById);
-
 // get all post
 router.get('/', getAllPosts);
+
+// get a post
+router.get('/:postId', getPost);
 
 // create post
 router.post('/:userId', verifyToken, createPost);
