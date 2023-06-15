@@ -9,30 +9,44 @@ exports.updateUserById = async (req, res) => {
   }
   try {
     const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
+      req.user._id,
       {
         $set: req.body,
       },
       { new: true }
     );
-    return res.status(200).json(updatedUser);
+    return res.status(200).json({
+      status: true,
+      message: 'Updated successfully',
+      data: updatedUser,
+    });
   } catch (err) {
-    return res.status(500).json(err);
+    return res.status(500).json({
+      status: false,
+      error: err,
+    });
   }
 };
 
 exports.deleteUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.user._id);
     try {
-      const deleted = await Post.deleteMany({ userId: req.params.id });
-      await User.findByIdAndDelete(req.params.id);
-      res.status(200).json('user has been deleted!');
+      const deleted = await Post.deleteMany({ userId: req.user._id });
+
+      await User.findByIdAndDelete(req.user._id);
+      res.status(200).json({
+        status: true,
+        message: 'Deleted user',
+      });
     } catch (err) {
       return res.status(500).json(err);
     }
   } catch (err) {
-    return res.status(404).json(err);
+    return res.status(500).json({
+      status: false,
+      error: err,
+    });
   }
 };
 
@@ -48,7 +62,10 @@ exports.getUserById = async (req, res, next, id) => {
     req.profile = user;
     next();
   } catch (err) {
-    return res.status(500).json(err);
+    return res.status(500).json({
+      status: false,
+      error: err,
+    });
   }
 };
 
