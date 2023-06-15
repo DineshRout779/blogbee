@@ -3,34 +3,50 @@ const Post = require('../models/Post');
 // get post by id middleware
 exports.getPostById = async (req, res, next, id) => {
   try {
-    const post = await Post.findById(id);
+    const post = await Post.findById(id).populate(
+      'userId',
+      'username _id profilePic'
+    );
 
     if (!post) {
       return res.status(404).json({
+        status: false,
         error: 'Post not found',
       });
     }
-
+    // console.log(post);
     req.post = post;
     next();
-  } catch (err) {
-    res.status(500).json(err);
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      error,
+    });
   }
 };
 
 // get post
-exports.getPost = (req, res) => {
-  return res.json(req.post);
-};
+exports.getPost = (req, res) => res.json(req.post);
 
 // create post
 exports.createPost = async (req, res) => {
-  const newPost = new Post(req.body);
   try {
-    const savedPost = await newPost.save();
+    const data = {
+      ...req.body,
+      userId: req.user._id,
+    };
+
+    const newPost = new Post(data);
+    const savedPost = await (
+      await newPost.save()
+    ).populate('userId', 'username _id profilePic');
+
     res.status(200).json(savedPost);
-  } catch (err) {
-    res.status(500).json(err);
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      error,
+    });
   }
 };
 
@@ -41,19 +57,25 @@ exports.getAllPosts = async (req, res) => {
   try {
     let posts;
     if (username) {
-      posts = await Post.find({ username });
+      posts = await Post.find({ username }).populate(
+        'userId',
+        'username _id profilePic'
+      );
     } else if (category) {
       posts = await Post.find({
         categories: {
           $in: [category],
         },
-      });
+      }).populate('userId', 'username _id profilePic');
     } else {
-      posts = await Post.find();
+      posts = await Post.find().populate('userId', 'username _id profilePic');
     }
     res.status(200).json(posts);
-  } catch (err) {
-    res.status(500).json(err);
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      error,
+    });
   }
 };
 
@@ -70,10 +92,13 @@ exports.updatePostById = async (req, res) => {
         $set: req.body,
       },
       { new: true }
-    );
+    ).populate('userId', 'username _id profilePic');
     return res.status(200).json(updatedPost);
-  } catch (err) {
-    return res.status(500).json(err);
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      error,
+    });
   }
 };
 
@@ -84,7 +109,10 @@ exports.deletePostById = async (req, res) => {
   try {
     await post.delete();
     res.status(200).json('Post has been deleted!');
-  } catch (err) {
-    res.status(500).json(err);
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      error,
+    });
   }
 };
