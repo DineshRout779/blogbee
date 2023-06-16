@@ -7,13 +7,18 @@ const Portfolio = () => {
       justifyContent={'center'}
       alignItems={'center'}
       flexDir={'column'}
-      bg='#5186e0'
+      bgGradient='linear(to-r, blue.500, purple.600)'
       color='#fcfcfc'
       mt='12'
+      p='2em'
       py='4em'
       textAlign='center'
     >
-      <Text as={'h1'} fontWeight='semibold' fontSize={'4xl'}>
+      <Text
+        as={'h1'}
+        fontWeight='bold'
+        fontSize={{ base: '3xl', sm: '2xl', md: '4xl' }}
+      >
         Integrate CodeTales&apos;s API with your portfolio
       </Text>
       <Text
@@ -21,7 +26,7 @@ const Portfolio = () => {
         my='4'
         mb='8'
         color='whiteAlpha.800'
-        fontSize={'lg'}
+        fontSize={{ sm: 'lg' }}
         maxW='668px'
       >
         Having trouble sharing your blogs in your portfolio? CodeTales provide
