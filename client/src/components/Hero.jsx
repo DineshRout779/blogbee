@@ -1,7 +1,14 @@
-import { Button, Container, Flex, Text } from '@chakra-ui/react';
+import {
+  Button,
+  Container,
+  Flex,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
 const Hero = () => {
+  const textColor = useColorModeValue('blackAlpha.800', 'whiteAlpha.600');
   return (
     <Container maxWidth={'1200px'} w='full'>
       <Flex
@@ -11,39 +18,44 @@ const Hero = () => {
         minH={'80vh'}
       >
         <Text
-          fontSize={'6xl'}
+          fontSize={{ base: '36px', md: '40px', lg: '60px' }}
           lineHeight='1.2'
           align='center'
           fontWeight='extrabold'
           my='4'
         >
-          Share Your Tech Blogs With <Text color='#5186e0'>CodeTales</Text>
+          Share Your Tech Blogs With <br />
+          <Text
+            as={'span'}
+            bgGradient='linear(to-r, blue.500, purple.600)'
+            bgClip='text'
+          >
+            CodeTales
+          </Text>
         </Text>
         <Text
           align='center'
-          fontSize={'xl'}
-          color='blackAlpha.700'
+          fontSize={{ base: '16px', md: '18px', lg: '24px' }}
+          color={textColor}
           mb='8'
-          maxW={'688px'}
+          maxW={{ base: '360px', md: '680px' }}
         >
           Your Ultimate Destination for Tech and Programming. Unleash your
           voice, inspire others, and dive into the world of tech blogging!
         </Text>
-        <Flex gap='1em'>
-          <Link to='/write'>
+        <Flex gap='1em' direction={{ base: 'column', sm: 'row' }}>
+          <Link to='/posts'>
             <Button
-              borderColor='#5186e0'
-              color={'#5186e0'}
               variant='outline'
-              _hover={{
-                bg: '#e4e8ed',
-              }}
+              borderColor='#5186e0'
+              color='#5186e0'
               size='lg'
+              w='240px'
             >
-              Write Blog
+              Explore Blogs
             </Button>
           </Link>
-          <Link to='/posts'>
+          <Link to='/signup'>
             <Button
               borderColor='#5186e0'
               color={'#fff'}
@@ -54,8 +66,9 @@ const Hero = () => {
                 borderColor: '#1246a1',
               }}
               size='lg'
+              w='240px'
             >
-              Explore Blogs
+              Get started
             </Button>
           </Link>
         </Flex>
