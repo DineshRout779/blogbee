@@ -1,18 +1,11 @@
-import { Box } from '@chakra-ui/react';
-import Featured from './components/Featured';
-import Footer from './components/Footer';
-import Hero from './components/Hero';
-import Navbar from './components/Navbar';
-import Portfolio from './components/Portfolio';
+import { Box, useColorModeValue } from '@chakra-ui/react';
+import { Outlet } from 'react-router-dom';
 
 function App() {
+  const bg = useColorModeValue('white', 'blackAlpha.500');
   return (
-    <Box>
-      <Navbar />
-      <Hero />
-      <Featured />
-      <Portfolio />
-      <Footer />
+    <Box bg={bg}>
+      <Outlet />
     </Box>
   );
 }
