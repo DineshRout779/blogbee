@@ -19,7 +19,7 @@ const BlogCardHorizontal = () => {
         borderRadius={'.5rem'}
       />
 
-      <Stack p='1em'>
+      <Stack p={{ sm: '0 1em', md: '1em' }} py={{ base: '1em' }}>
         <Heading size='md'>The perfect latte</Heading>
 
         <Text py='2'>

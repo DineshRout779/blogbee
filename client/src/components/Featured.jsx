@@ -8,7 +8,7 @@ const Featured = () => {
       <Text as={'h1'} my='8' fontWeight='semibold' fontSize={'2xl'}>
         Featured Posts
       </Text>
-      <Flex gap='2em' direction={{ base: 'column', sm: 'row' }}>
+      <Flex gap='2em' direction={{ base: 'column', md: 'row' }}>
         <BlogCard />
 
         <Stack spacing={'4'} flex={'0.6'}>
