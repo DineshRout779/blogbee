@@ -1,11 +1,7 @@
-import {
-  Button,
-  Container,
-  Flex,
-  Text,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Container, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import ButtonSolid from './common/ButtonSolid';
+import ButtonOutline from './common/ButtonOutline';
 
 const Hero = () => {
   const textColor = useColorModeValue('blackAlpha.800', 'whiteAlpha.600');
@@ -44,32 +40,15 @@ const Hero = () => {
           voice, inspire others, and dive into the world of tech blogging!
         </Text>
         <Flex gap='1em' direction={{ base: 'column', sm: 'row' }}>
-          <Link to='/posts'>
-            <Button
-              variant='outline'
-              borderColor='#5186e0'
-              color='#5186e0'
-              size='lg'
-              w='240px'
-            >
+          <Link to='/blogs'>
+            <ButtonOutline size='lg' w='240px'>
               Explore Blogs
-            </Button>
+            </ButtonOutline>
           </Link>
           <Link to='/signup'>
-            <Button
-              borderColor='#5186e0'
-              color={'#fff'}
-              bg='#5186e0'
-              variant='solid'
-              _hover={{
-                bg: '#1246a1',
-                borderColor: '#1246a1',
-              }}
-              size='lg'
-              w='240px'
-            >
+            <ButtonSolid size='lg' w='240px'>
               Get started
-            </Button>
+            </ButtonSolid>
           </Link>
         </Flex>
       </Flex>
