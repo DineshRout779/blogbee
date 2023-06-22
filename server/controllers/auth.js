@@ -44,6 +44,12 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
+    if (!req.body.email || !req.body.password) {
+      return res.status(400).json({
+        status: false,
+        error: 'All fields are required!',
+      });
+    }
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
