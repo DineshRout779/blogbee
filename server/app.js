@@ -20,7 +20,7 @@ connectDB();
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', usersRoutes);
-app.use('/api/v1/posts', postsRoutes);
+app.use('/api/v1/blogs', postsRoutes);
 
 app.listen(port, () =>
   console.log(`Server started on http://localhost:${port}`)
