@@ -1,38 +1,100 @@
 import {
+  Avatar,
   Flex,
-  Heading,
   HStack,
   Image,
   Stack,
   Tag,
   Text,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
-const BlogCardHorizontal = () => {
+const BlogCardHorizontal = ({ blog }) => {
   return (
-    <Flex direction={{ base: 'column', sm: 'row' }}>
-      <Image
-        objectFit='cover'
-        maxW={{ base: '100%', sm: '200px' }}
-        src='https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
-        alt='Caffe Latte'
-        borderRadius={'.5rem'}
-      />
+    <Flex direction={{ base: 'column', sm: 'row' }} my='2'>
+      <Link to='/blogs/12345dwqd'>
+        {blog.photo ? (
+          <Image
+            h={'100%'}
+            aspectRatio={'16/9'}
+            objectFit='cover'
+            maxW={{ base: '100%', sm: '200px' }}
+            _hover={{
+              filter: 'brightness(0.8)',
+            }}
+            transition='all 0.3s ease'
+            src={blog.photo}
+            alt='Caffe Latte'
+            borderRadius={'.5rem'}
+          />
+        ) : (
+          <Flex
+            aspectRatio={'16/9'}
+            // h={{ base: '200px', md: '100%' }}
+            h='100%'
+            w={{ base: '100%', sm: '200px' }}
+            _hover={{
+              filter: 'brightness(0.8)',
+            }}
+            p='1em'
+            borderRadius={'.5rem'}
+            bgGradient='linear(to-l, #7928CA, #FF0080)'
+            justifyContent='center'
+            alignItems={'center'}
+          >
+            <Text fontSize='xl' fontWeight={'semibold'}>
+              {blog.title}
+            </Text>
+          </Flex>
+        )}
+      </Link>
 
-      <Stack p={{ sm: '0 1em', md: '1em' }} py={{ base: '1em' }}>
-        <Heading size='md'>The perfect latte</Heading>
+      <Stack p={{ sm: '0 1em' }} py={{ base: '1em' }}>
+        <Link to='/blogs/12345dwqd'>
+          <Text
+            fontSize={'xl'}
+            _hover={{ color: 'blue.500' }}
+            transition='all 0.3s ease'
+            fontWeight='semibold'
+            my='2'
+          >
+            {blog.title}
+          </Text>
+        </Link>
 
-        <Text py='2'>
-          Caffè latte is a coffee beverage of Italian origin made with espresso
-          and steamed milk.
-        </Text>
-        <HStack spacing={4}>
-          <Tag size={'md'} variant='outline' colorScheme='teal'>
-            JavaScript
-          </Tag>
-          <Tag size={'md'} variant='outline' colorScheme='teal'>
-            React
-          </Tag>
+        <Wrap spacing={4} my='2'>
+          {blog.categories.map((c) => (
+            <WrapItem key={c}>
+              <Link to={'/topics/' + c}>
+                <Tag
+                  size={'md'}
+                  _hover={{ color: 'blue.400' }}
+                  transition='all 0.3s ease'
+                  variant='subtle'
+                  textTransform={'capitalize'}
+                >
+                  {c}
+                </Tag>
+              </Link>
+            </WrapItem>
+          ))}
+        </Wrap>
+
+        <HStack gap='2'>
+          <Avatar
+            name='Dan Abrahmov'
+            size='sm'
+            src={blog.userId.profilePic || 'https://bit.ly/dan-abramov'}
+          />
+
+          <Text fontSize={'md'} as='p'>
+            <Text as='span' fontWeight={'bold'}>
+              {blog.userId.username}
+            </Text>{' '}
+            • <Text as='span'>{new Date(blog.createdAt).toDateString()}</Text>
+          </Text>
         </HStack>
       </Stack>
     </Flex>

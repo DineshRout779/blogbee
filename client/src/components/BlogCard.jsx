@@ -1,36 +1,92 @@
 import {
+  Avatar,
   Box,
-  Heading,
+  Flex,
   HStack,
   Image,
   Stack,
   Tag,
   Text,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
-const BlogCard = () => {
+const BlogCard = ({ blog }) => {
   return (
     <Box flex={'0.4'}>
-      <Image
-        src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-        alt='Green double couch with wooden legs'
-        borderRadius='lg'
-      />
+      <Link to='/blogs/12345dwqd'>
+        {blog.photo ? (
+          <Image
+            _hover={{
+              filter: 'brightness(0.8)',
+            }}
+            aspectRatio={'16/9'}
+            transition='all 0.3s ease'
+            src={blog.photo}
+            alt='Green double couch with wooden legs'
+            borderRadius='lg'
+          />
+        ) : (
+          <Flex
+            aspectRatio={'16/9'}
+            p='2em'
+            borderRadius={'lg'}
+            bgGradient='linear(to-l, #7928CA, #FF0080)'
+            justifyContent='center'
+            alignItems={'center'}
+          >
+            <Text fontSize='2xl' fontWeight={'semibold'}>
+              {blog.title}
+            </Text>
+          </Flex>
+        )}
+      </Link>
       <Stack mt='6' spacing='3'>
-        <Heading size='md'>Living room Sofa</Heading>
-        <Text>
-          This sofa is perfect for modern tropical spaces, baroque inspired
-          spaces, earthy toned spaces and for people who love a chic design with
-          a sprinkle of vintage design.
-        </Text>
-        <HStack spacing={4}>
-          <Tag size={'md'} variant='outline' colorScheme='teal'>
-            JavaScript
-          </Tag>
-          <Tag size={'md'} variant='outline' colorScheme='teal'>
-            React
-          </Tag>
+        <Link to='/blogs/12345dwqd'>
+          <Text
+            fontSize={'xl'}
+            _hover={{ color: 'blue.500' }}
+            transition='all 0.3s ease'
+            fontWeight='semibold'
+            my='2'
+          >
+            {blog.title}
+          </Text>
+        </Link>
+
+        <HStack gap='2'>
+          <Avatar
+            name='Dan Abrahmov'
+            size='sm'
+            src={blog.userId.profilePic || 'https://bit.ly/dan-abramov'}
+          />
+
+          <Text fontSize={'md'} as='p'>
+            <Text as='span' fontWeight={'bold'}>
+              {blog.userId.username}
+            </Text>{' '}
+            • <Text as='span'>{new Date(blog.createdAt).toDateString()}</Text>
+          </Text>
         </HStack>
+
+        <Wrap spacing={4} mt='4'>
+          {blog.categories.map((c) => (
+            <WrapItem key={c}>
+              <Link to={'/topics/' + c}>
+                <Tag
+                  size={'md'}
+                  _hover={{ color: 'blue.400' }}
+                  transition='all 0.3s ease'
+                  variant='subtle'
+                  textTransform={'capitalize'}
+                >
+                  {c}
+                </Tag>
+              </Link>
+            </WrapItem>
+          ))}
+        </Wrap>
       </Stack>
     </Box>
   );
