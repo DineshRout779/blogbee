@@ -70,7 +70,11 @@ exports.getAllPosts = async (req, res) => {
     } else {
       posts = await Post.find().populate('userId', 'username _id profilePic');
     }
-    res.status(200).json(posts);
+    res.status(200).json({
+      success: true,
+      data: posts,
+      message: 'Blogs fetched successfully!',
+    });
   } catch (error) {
     res.status(500).json({
       status: false,
@@ -93,7 +97,11 @@ exports.updatePostById = async (req, res) => {
       },
       { new: true }
     ).populate('userId', 'username _id profilePic');
-    return res.status(200).json(updatedPost);
+    return res.status(200).json({
+      success: true,
+      data: updatedPost,
+      message: 'Blog updated successfully!',
+    });
   } catch (error) {
     res.status(500).json({
       status: false,
