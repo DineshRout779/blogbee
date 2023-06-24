@@ -9,11 +9,22 @@ import SubScript from '@tiptap/extension-subscript';
 import { ButtonGroup, Container } from '@chakra-ui/react';
 import ButtonSolid from '../common/ButtonSolid';
 import ButtonOutline from '../common/ButtonOutline';
+import { addBlog } from '../../services/lib/blog';
+import { useAuth } from '../../hooks/useAuth';
+import { Text, Textarea, TextInput } from '@mantine/core';
+import { useState } from 'react';
+import TurndownService from 'turndown';
 
-const content =
-  '<h2 style="text-align: center;">Welcome to Mantine rich text editor</h2><p><code>RichTextEditor</code> component focuses on usability and is designed to be as simple as possible to bring a familiar editing experience to regular users. <code>RichTextEditor</code> is based on <a href="https://tiptap.dev/" rel="noopener noreferrer" target="_blank">Tiptap.dev</a> and supports all of its features:</p><ul><li>General text formatting: <strong>bold</strong>, <em>italic</em>, <u>underline</u>, <s>strike-through</s> </li><li>Headings (h1-h6)</li><li>Sub and super scripts (<sup>&lt;sup /&gt;</sup> and <sub>&lt;sub /&gt;</sub> tags)</li><li>Ordered and bullet lists</li><li>Text align&nbsp;</li><li>And all <a href="https://tiptap.dev/extensions" target="_blank" rel="noopener noreferrer">other extensions</a></li></ul>';
+const turndownService = new TurndownService();
+
+const content = ``;
 
 const TextEditor = () => {
+  const {
+    state: { user },
+  } = useAuth();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -27,12 +38,46 @@ const TextEditor = () => {
     content,
   });
 
-  const getContent = () => console.log(editor.getHTML());
+  const saveBlog = async () => {
+    try {
+      const data = {
+        title,
+        description,
+        content: turndownService.turndown(editor.getHTML()),
+      };
+
+      const res = await addBlog(data, user._id);
+
+      console.log(res);
+    } catch (err) {
+      console.log(err.response);
+    }
+  };
 
   return (
     <Container maxW={'1200px'}>
+      <TextInput
+        name='title'
+        placeholder='Blog title'
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        label='Title'
+        withAsterisk
+        my={8}
+      />
+
+      <Textarea
+        name='description'
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder='Blog description'
+        label='Description'
+        withAsterisk
+        my={8}
+      />
+      <Text>Content</Text>
       <RichTextEditor editor={editor}>
-        <RichTextEditor.Toolbar sticky>
+        <RichTextEditor.Toolbar sticky stickyOffset={80}>
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.Bold />
             <RichTextEditor.Italic />
@@ -77,7 +122,7 @@ const TextEditor = () => {
 
       <ButtonGroup my='4'>
         <ButtonOutline>Cancel</ButtonOutline>
-        <ButtonSolid onClick={getContent}>Save</ButtonSolid>
+        <ButtonSolid onClick={saveBlog}>Save</ButtonSolid>
       </ButtonGroup>
     </Container>
   );
