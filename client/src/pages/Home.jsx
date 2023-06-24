@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Featured from '../components/Featured';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
@@ -10,6 +12,13 @@ const Home = () => {
   const {
     state: { user },
   } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/blogs');
+    }
+  }, [user, navigate]);
 
   return (
     <>
