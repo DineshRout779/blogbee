@@ -12,7 +12,7 @@ const Feed = () => {
   if (loading) {
     return (
       <Flex
-        minH={'60vh'}
+        minH={'full'}
         flexDir='column'
         justifyContent='center'
         alignItems={'center'}
