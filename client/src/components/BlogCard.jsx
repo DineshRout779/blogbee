@@ -15,8 +15,8 @@ import { Link } from 'react-router-dom';
 const BlogCard = ({ blog }) => {
   return (
     <Box flex={'0.4'}>
-      <Link to='/blogs/12345dwqd'>
-        {blog.photo ? (
+      <Link to={`/blogs/${blog._id}`}>
+        {blog?.photo ? (
           <Image
             _hover={{
               filter: 'brightness(0.8)',
@@ -36,16 +36,16 @@ const BlogCard = ({ blog }) => {
             justifyContent='center'
             alignItems={'center'}
           >
-            <Text fontSize='2xl' fontWeight={'semibold'}>
+            <Text fontSize='2xl' as='h1' fontWeight={'semibold'}>
               {blog.title}
             </Text>
           </Flex>
         )}
       </Link>
       <Stack mt='6' spacing='3'>
-        <Link to='/blogs/12345dwqd'>
+        <Link to={`/blogs/${blog._id}`}>
           <Text
-            fontSize={'xl'}
+            fontSize={{ sm: 'xl', md: '2xl' }}
             _hover={{ color: 'blue.500' }}
             transition='all 0.3s ease'
             fontWeight='semibold'

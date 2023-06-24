@@ -14,8 +14,8 @@ import { Link } from 'react-router-dom';
 const BlogCardHorizontal = ({ blog }) => {
   return (
     <Flex direction={{ base: 'column', sm: 'row' }} my='2'>
-      <Link to='/blogs/12345dwqd'>
-        {blog.photo ? (
+      <Link to={`/blogs/${blog._id}`}>
+        {blog?.photo ? (
           <Image
             h={'100%'}
             aspectRatio={'16/9'}
@@ -44,7 +44,7 @@ const BlogCardHorizontal = ({ blog }) => {
             justifyContent='center'
             alignItems={'center'}
           >
-            <Text fontSize='xl' fontWeight={'semibold'}>
+            <Text fontSize='xl' as='h1' fontWeight={'semibold'}>
               {blog.title}
             </Text>
           </Flex>
@@ -52,7 +52,7 @@ const BlogCardHorizontal = ({ blog }) => {
       </Link>
 
       <Stack p={{ sm: '0 1em' }} py={{ base: '1em' }}>
-        <Link to='/blogs/12345dwqd'>
+        <Link to={`/blogs/${blog._id}`}>
           <Text
             fontSize={'xl'}
             _hover={{ color: 'blue.500' }}
