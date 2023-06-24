@@ -3,7 +3,7 @@ import axios from 'axios';
 const user = JSON.parse(localStorage.getItem('user')) || null;
 
 export const axiosClient = axios.create({
-  baseURL: `http://localhost:5000/api/v1`,
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
