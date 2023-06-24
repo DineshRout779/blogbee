@@ -8,7 +8,11 @@ const PostSchema = new Schema(
       required: true,
       unique: true,
     },
-    desc: {
+    description: {
+      type: String,
+      required: true,
+    },
+    content: {
       type: String,
       required: true,
     },
@@ -25,6 +29,18 @@ const PostSchema = new Schema(
       type: Array,
       required: false,
     },
+    likes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    views: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   { timestamps: true }
 );
