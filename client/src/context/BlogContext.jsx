@@ -1,11 +1,5 @@
-import { createContext, useEffect, useReducer } from 'react';
-import {
-  blogReducers,
-  getBlogsFailed,
-  getBlogsStart,
-  getBlogsSuccess,
-} from '../reducers/blogReducers';
-import { getAllBlogs } from '../services/lib/blog';
+import { createContext, useReducer } from 'react';
+import { blogReducers } from '../reducers/blogReducers';
 
 const INITIAL_STATE = {
   blogs: [],
@@ -19,22 +13,6 @@ export const BlogContext = createContext();
 
 export const BlogContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(blogReducers, INITIAL_STATE);
-
-  useEffect(() => {
-    (async () => {
-      dispatch(getBlogsStart());
-      try {
-        let res = await getAllBlogs();
-
-        if (res.status === 200) {
-          dispatch(getBlogsSuccess(res.data.data));
-        }
-      } catch (err) {
-        console.log(err.response);
-        dispatch(getBlogsFailed(err.response.data.error));
-      }
-    })();
-  }, []);
 
   return (
     <BlogContext.Provider value={{ state, dispatch }}>
