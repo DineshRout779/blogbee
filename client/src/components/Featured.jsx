@@ -1,12 +1,38 @@
 import { Container, Flex, Spinner, Stack, Text } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import { useBlogs } from '../hooks/useBlogs';
+import {
+  getBlogsFailed,
+  getBlogsStart,
+  getBlogsSuccess,
+} from '../reducers/blogReducers';
+import { getAllBlogs } from '../services/lib/blog';
 import BlogCard from './BlogCard';
 import BlogCardHorizontal from './BlogCardHorizontal';
 
 const Featured = () => {
   const {
     state: { blogs, loading, error },
+    dispatch,
   } = useBlogs();
+
+  useEffect(() => {
+    const getBlogs = async () => {
+      try {
+        dispatch(getBlogsStart());
+        let res = await getAllBlogs();
+
+        if (res.status === 200) {
+          dispatch(getBlogsSuccess(res.data.data));
+        }
+      } catch (err) {
+        console.log(err.response);
+        dispatch(getBlogsFailed(err.response.data.error));
+      }
+    };
+    getBlogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (loading) {
     return (
