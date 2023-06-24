@@ -14,6 +14,8 @@ import { useAuth } from '../../hooks/useAuth';
 import { Text, Textarea, TextInput } from '@mantine/core';
 import { useState } from 'react';
 import TurndownService from 'turndown';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const turndownService = new TurndownService();
 
@@ -37,6 +39,7 @@ const TextEditor = () => {
     ],
     content,
   });
+  const navigate = useNavigate();
 
   const saveBlog = async () => {
     try {
@@ -49,6 +52,11 @@ const TextEditor = () => {
       const res = await addBlog(data, user._id);
 
       console.log(res);
+
+      if (res.status === 200) {
+        toast.success('Blog created successfully!');
+        navigate('/blogs');
+      }
     } catch (err) {
       console.log(err.response);
     }
