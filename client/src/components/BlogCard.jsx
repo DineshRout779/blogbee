@@ -35,15 +35,16 @@ const BlogCard = ({ blog }) => {
             bgGradient='linear(to-l, #7928CA, #FF0080)'
             justifyContent='center'
             alignItems={'center'}
+            color='#fff'
           >
             <Text fontSize='2xl' as='h1' fontWeight={'semibold'}>
-              {blog.title}
+              {blog?.title}
             </Text>
           </Flex>
         )}
       </Link>
       <Stack mt='6' spacing='3'>
-        <Link to={`/blogs/${blog._id}`}>
+        <Link to={`/blogs/${blog?._id}`}>
           <Text
             fontSize={{ sm: 'xl', md: '2xl' }}
             _hover={{ color: 'blue.500' }}
@@ -51,7 +52,7 @@ const BlogCard = ({ blog }) => {
             fontWeight='semibold'
             my='2'
           >
-            {blog.title}
+            {blog?.title}
           </Text>
         </Link>
 
@@ -59,12 +60,12 @@ const BlogCard = ({ blog }) => {
           <Avatar
             name='Dan Abrahmov'
             size='sm'
-            src={blog.userId.profilePic || 'https://bit.ly/dan-abramov'}
+            src={blog.userId?.profilePic || 'https://bit.ly/dan-abramov'}
           />
 
           <Text fontSize={'md'} as='p'>
             <Text as='span' fontWeight={'bold'}>
-              {blog.userId.username}
+              {blog.userId?.username}
             </Text>{' '}
             • <Text as='span'>{new Date(blog.createdAt).toDateString()}</Text>
           </Text>

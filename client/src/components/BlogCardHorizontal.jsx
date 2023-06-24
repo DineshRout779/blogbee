@@ -43,6 +43,7 @@ const BlogCardHorizontal = ({ blog }) => {
             bgGradient='linear(to-l, #7928CA, #FF0080)'
             justifyContent='center'
             alignItems={'center'}
+            color='#fff'
           >
             <Text fontSize='xl' as='h1' fontWeight={'semibold'}>
               {blog.title}
@@ -86,12 +87,12 @@ const BlogCardHorizontal = ({ blog }) => {
           <Avatar
             name='Dan Abrahmov'
             size='sm'
-            src={blog.userId.profilePic || 'https://bit.ly/dan-abramov'}
+            src={blog.userId?.profilePic || 'https://bit.ly/dan-abramov'}
           />
 
           <Text fontSize={'md'} as='p'>
             <Text as='span' fontWeight={'bold'}>
-              {blog.userId.username}
+              {blog.userId?.username}
             </Text>{' '}
             • <Text as='span'>{new Date(blog.createdAt).toDateString()}</Text>
           </Text>
