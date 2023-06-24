@@ -10,7 +10,8 @@ import { getAllBlogs } from '../services/lib/blog';
 const INITIAL_STATE = {
   blogs: [],
   categories: [],
-  loading: false,
+  selectedCategory: [],
+  loading: true,
   error: null,
 };
 
@@ -21,9 +22,9 @@ export const BlogContextProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
+      dispatch(getBlogsStart());
       try {
         let res = await getAllBlogs();
-        dispatch(getBlogsStart());
 
         if (res.status === 200) {
           dispatch(getBlogsSuccess(res.data.data));
