@@ -3,6 +3,7 @@ import { ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import theme from './theme.js';
 import { useState } from 'react';
 import AppRoutes from './routes/AppRoutes.jsx';
+import './index.css';
 
 const Index = () => {
   const colorMode = localStorage.getItem('chakra-ui-color-mode');
