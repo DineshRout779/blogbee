@@ -4,82 +4,167 @@ import {
   Box,
   Container,
   Flex,
-  HStack,
   Image,
+  Spinner,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { useAuth } from '../hooks/useAuth';
+import { getBlog, incrementViews } from '../services/lib/blog';
+import { Remarkable } from 'remarkable';
+import Prism from 'prismjs';
+
+const md = new Remarkable({
+  highlight: (str, lang) => {
+    const highlightedCode = Prism.highlight(str, Prism.languages[lang], lang);
+    const code = lang
+      ? `<pre><code class="language-${lang}">${highlightedCode}</code></pre>`
+      : `<pre><code>${highlightedCode}</code></pre>`;
+    return code;
+  },
+});
+
+function renderMarkdownToHTML(markdown) {
+  // This is ONLY safe because the output HTML
+  // is shown to the same user, and because you
+  // trust this Markdown parser to not have bugs.
+  const renderedHTML = md.render(markdown);
+  return { __html: renderedHTML };
+}
+
+md.renderer.rules;
 
 const Blog = () => {
+  const {
+    state: { user },
+  } = useAuth();
+  const { id } = useParams();
+  const [blog, setBlog] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const timeColor = useColorModeValue('blackAlpha.800', 'whiteAlpha.800');
-  const relatedBg = useColorModeValue('gray.100', 'blackAlpha.300');
+  const headingColor = useColorModeValue('blackAlpha.800', 'whiteAlpha.800');
+  // const relatedBg = useColorModeValue('gray.100', 'blackAlpha.300');
+
+  useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        const res = await getBlog(id);
+        setBlog(res.data);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err.response);
+        setIsLoading(false);
+      }
+    };
+    fetchBlog();
+  }, [id]);
+
+  useEffect(() => {
+    if (user)
+      (async () => {
+        try {
+          await incrementViews(id, user._id);
+        } catch (err) {
+          console.log(err.response);
+        }
+      })();
+  }, [user, id]);
+
+  if (isLoading) {
+    return (
+      <Flex
+        minH={'100vh'}
+        flexDir='column'
+        justifyContent='center'
+        alignItems={'center'}
+      >
+        <Spinner size='lg' />
+        <Text my='4'>Fetching blog...</Text>
+      </Flex>
+    );
+  }
+
   return (
     <Box>
       <Navbar />
       <Container maxW={'1200px'} minH={'100vh'} mt='8' pb='8'>
         <Flex gap='8' flexDir={{ base: 'column', md: 'row' }}>
-          <Box flex={{ base: 1, md: '0.7' }}>
+          <Box flex={{ base: 1, md: 1 }} maxW='960px' m='auto'>
             <AspectRatio ratio={16 / 9} maxH='360px'>
-              <Image
-                src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-                alt='Green double couch with wooden legs'
-                borderRadius='lg'
-              />
+              {blog.photo ? (
+                <Image
+                  src={blog.photo}
+                  alt='Green double couch with wooden legs'
+                  borderRadius='lg'
+                />
+              ) : (
+                <Flex
+                  width={'100%'}
+                  aspectRatio={'16/9'}
+                  p='2em'
+                  borderRadius={'lg'}
+                  bgGradient='linear(to-l, #7928CA, #FF0080)'
+                  justifyContent='center'
+                  alignItems={'center'}
+                  textAlign='center'
+                >
+                  <Text
+                    fontSize={{ sm: '3xl', md: '4xl' }}
+                    fontWeight={'semibold'}
+                    color='#fff'
+                  >
+                    {blog.title}
+                  </Text>
+                </Flex>
+              )}
             </AspectRatio>
-            <Text as='h1' fontSize={'4xl'} my='4' fontWeight='bold'>
-              The impact of the technology on workplace: How technology is
-              changing
+            <Text
+              as='h1'
+              fontSize={{ base: 'xl', sm: '2xl', md: '4xl' }}
+              my='4'
+              fontWeight='bold'
+              textAlign={'center'}
+              color={headingColor}
+            >
+              {blog.title}
             </Text>
 
-            <HStack gap='4' my='2' mb='8'>
+            <Flex
+              gap='4'
+              my='2'
+              mb='8'
+              justifyContent={'center'}
+              alignItems={'center'}
+            >
               <Avatar
                 name='Dan Abrahmov'
                 size='sm'
                 src='https://bit.ly/dan-abramov'
               />
 
-              <Text color={timeColor} as='p' fontSize={'md'}>
-                Dan Abrahmov • 20 Aug 2022
+              <Text color={timeColor} as='p' fontSize={'lg'}>
+                {blog.userId.username} •{' '}
+                {new Date(blog.createdAt).toDateString()}
               </Text>
-            </HStack>
+            </Flex>
 
-            <Box fontSize={'1.2em'}>
-              <Text as='p' mb='8'>
-                As we continue into the 21st century, it seems like there are
-                new technological advances on a daily basis, and those advances
-                are beginning to embed themselves into the workplace. Technology
-                in the Workplace is truly changing the way we work — we are no
-                longer chained to our desks, but rather always have a laptop, a
-                tablet or a smartphone in hand.
-              </Text>
-
-              <Text as='p' mb='8'>
-                There are a few cons to having technology fill a prominent role
-                in your business, but the advantages definitely outweigh the
-                disadvantages. The primary drawbacks include dependency, the
-                constant need to upgrade and possible negative effects on
-                workplace relationships. While the benefits include, but are not
-                limited to, changing communication, increasing efficiency and
-                motivating employees.
-              </Text>
-              <Text as='p' mb='8'>
-                Finding ways to integrate technology in the workplace and work
-                environment is key to keeping up with the trends that are
-                pushing the workplace to be more and more involved and invested
-                in ever-changing technologies.
-              </Text>
-            </Box>
+            <Box
+              className='blog'
+              dangerouslySetInnerHTML={renderMarkdownToHTML(blog.content)}
+            ></Box>
           </Box>
 
-          <Box flex='0.3' h='fit-content' className='sticky sidebar'>
+          {/* <Box flex='0.3' h='fit-content' className='sticky sidebar'>
             <Box p='4' bg={relatedBg} borderRadius='md' mb='8'>
               <Text fontSize={'xl'}>In this article</Text>
             </Box>
             <Box p='4' bg={relatedBg} borderRadius='md' my='8'>
               <Text fontSize={'xl'}>Related articles</Text>
             </Box>
-          </Box>
+          </Box> */}
         </Flex>
       </Container>
     </Box>
