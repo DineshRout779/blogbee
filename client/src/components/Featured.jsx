@@ -32,13 +32,19 @@ const Featured = () => {
         Featured Posts
       </Text>
       <Flex gap='2em' direction={{ base: 'column', md: 'row' }}>
-        <BlogCard blog={blogs[0]} />
+        {blogs.length !== 0 ? (
+          <>
+            <BlogCard blog={blogs[0]} />
 
-        <Stack spacing={'4'} flex={'0.6'}>
-          {blogs.map((blog) => (
-            <BlogCardHorizontal blog={blog} key={blog._id} />
-          ))}
-        </Stack>
+            <Stack spacing={'4'} flex={'0.6'}>
+              {blogs.map((blog) => (
+                <BlogCardHorizontal blog={blog} key={blog._id} />
+              ))}
+            </Stack>
+          </>
+        ) : (
+          <>No Blogs Found</>
+        )}
       </Flex>
     </Container>
   );
