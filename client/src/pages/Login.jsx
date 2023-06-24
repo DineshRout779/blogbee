@@ -45,7 +45,7 @@ const Login = () => {
       const res = await loginService({ email, password });
       dispatch(loginStart(formValues));
 
-      console.log(res);
+      // console.log(res);
 
       if (res.status === 200) {
         toast.success('Login successful!');
