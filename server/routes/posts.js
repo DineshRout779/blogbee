@@ -6,6 +6,7 @@ const {
   updatePostById,
   deletePostById,
   getPost,
+  updatePostViews,
 } = require('../controllers/posts');
 const { getUserById } = require('../controllers/users');
 const {
@@ -32,6 +33,9 @@ router.put(
   verifyTokenAndAuthorization,
   updatePostById
 );
+
+// increment views count
+router.put('/views-increment/:postId/:userId', verifyToken, updatePostViews);
 
 // delete post
 router.delete(
