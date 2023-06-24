@@ -142,11 +142,11 @@ const Blog = () => {
               <Avatar
                 name='Dan Abrahmov'
                 size='sm'
-                src='https://bit.ly/dan-abramov'
+                src={blog.userId?.profilePic || 'https://bit.ly/dan-abramov'}
               />
 
               <Text color={timeColor} as='p' fontSize={'lg'}>
-                {blog.userId.username} •{' '}
+                {blog.userId?.username} •{' '}
                 {new Date(blog.createdAt).toDateString()}
               </Text>
             </Flex>
