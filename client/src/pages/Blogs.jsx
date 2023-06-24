@@ -12,7 +12,7 @@ const Blogs = () => {
   if (loading) {
     return (
       <Flex
-        minH={'60vh'}
+        minH={'100vh'}
         flexDir='column'
         justifyContent='center'
         alignItems={'center'}
