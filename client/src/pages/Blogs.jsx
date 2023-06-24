@@ -1,13 +1,37 @@
 import { Box, Container, Flex, Grid, Spinner, Text } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import BlogCard from '../components/BlogCard';
 import Navbar from '../components/Navbar';
 import Topics from '../components/Topics';
 import { useBlogs } from '../hooks/useBlogs';
+import {
+  getBlogsFailed,
+  getBlogsStart,
+  getBlogsSuccess,
+} from '../reducers/blogReducers';
+import { getAllBlogs } from '../services/lib/blog';
 
 const Blogs = () => {
   const {
     state: { blogs, loading, error },
+    dispatch,
   } = useBlogs();
+
+  useEffect(() => {
+    (async () => {
+      dispatch(getBlogsStart());
+      try {
+        let res = await getAllBlogs();
+
+        if (res.status === 200) {
+          dispatch(getBlogsSuccess(res.data.data));
+        }
+      } catch (err) {
+        console.log(err.response);
+        dispatch(getBlogsFailed(err.response.data.error));
+      }
+    })();
+  }, [dispatch]);
 
   if (loading) {
     return (
