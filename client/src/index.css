@@ -48,5 +48,11 @@ p + p {
   margin: 0.5em 0;
 }
 
+.blog img {
+  max-width: 675px;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
 @media screen and (max-width: 1080px) {
 }

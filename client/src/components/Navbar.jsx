@@ -29,7 +29,6 @@ import {
 } from '@chakra-ui/react';
 import Logo from './Logo';
 import { useEffect, useRef, useState } from 'react';
-import { useMantineColorScheme } from '@mantine/core';
 import { useAuth } from '../hooks/useAuth';
 import { logout } from '../reducers/authReducers';
 
@@ -41,13 +40,11 @@ const Navbar = () => {
   const [show, setShow] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const { colorMode, toggleColorMode } = useColorMode();
-  const { toggleColorScheme } = useMantineColorScheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
 
   const handleThemeChange = () => {
     toggleColorMode();
-    toggleColorScheme(colorMode === 'light' ? 'dark' : 'light');
   };
 
   const handleLogout = () => dispatch(logout());

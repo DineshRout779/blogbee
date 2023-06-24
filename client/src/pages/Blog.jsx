@@ -15,17 +15,8 @@ import Navbar from '../components/Navbar';
 import { useAuth } from '../hooks/useAuth';
 import { getBlog, incrementViews } from '../services/lib/blog';
 import { Remarkable } from 'remarkable';
-import Prism from 'prismjs';
 
-const md = new Remarkable({
-  highlight: (str, lang) => {
-    const highlightedCode = Prism.highlight(str, Prism.languages[lang], lang);
-    const code = lang
-      ? `<pre><code class="language-${lang}">${highlightedCode}</code></pre>`
-      : `<pre><code>${highlightedCode}</code></pre>`;
-    return code;
-  },
-});
+const md = new Remarkable();
 
 function renderMarkdownToHTML(markdown) {
   // This is ONLY safe because the output HTML
@@ -34,8 +25,6 @@ function renderMarkdownToHTML(markdown) {
   const renderedHTML = md.render(markdown);
   return { __html: renderedHTML };
 }
-
-md.renderer.rules;
 
 const Blog = () => {
   const {
@@ -94,7 +83,7 @@ const Blog = () => {
         <Flex gap='8' flexDir={{ base: 'column', md: 'row' }}>
           <Box flex={{ base: 1, md: 1 }} maxW='960px' m='auto'>
             <AspectRatio ratio={16 / 9} maxH='360px'>
-              {blog.photo ? (
+              {blog?.photo ? (
                 <Image
                   src={blog.photo}
                   alt='Green double couch with wooden legs'
@@ -130,6 +119,15 @@ const Blog = () => {
               color={headingColor}
             >
               {blog.title}
+            </Text>
+            <Text
+              as='h3'
+              fontSize={{ base: 'md', sm: 'lg', md: 'xl' }}
+              my='4'
+              textAlign={'center'}
+              color={headingColor}
+            >
+              {blog.description}
             </Text>
 
             <Flex
