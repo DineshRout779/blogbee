@@ -1,7 +1,8 @@
 import { axiosClient } from '../apiClient';
 
-export const getAllBlogs = () => {
-  return axiosClient.get(`/blogs`);
+export const getAllBlogs = (category) => {
+  const q = category === null || category === '' ? '' : category.toLowerCase();
+  return axiosClient.get(`/blogs?category=${q}`);
 };
 
 export const getBlog = (id) => {

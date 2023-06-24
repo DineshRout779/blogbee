@@ -1,52 +1,30 @@
 import { Box, Button, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import { Link, useSearchParams } from 'react-router-dom';
+
+const topics = ['React', 'JavaScript', 'Node.js', 'CSS'];
 
 const Topics = () => {
+  const [searchParams] = useSearchParams();
   return (
     <Box>
       <Text fontSize={'xl'} mb='4'>
         Filter by topics
       </Text>
       <Wrap spacing={4}>
-        <WrapItem>
-          <Button colorScheme='gray' variant='outline'>
-            React
-          </Button>
-        </WrapItem>
-        <WrapItem>
-          <Button colorScheme='gray' variant='outline'>
-            JavaScript
-          </Button>
-        </WrapItem>
-        <WrapItem>
-          <Button colorScheme='gray' variant='outline'>
-            Node.js
-          </Button>
-        </WrapItem>
-        <WrapItem>
-          <Button colorScheme='gray' variant='outline'>
-            CSS
-          </Button>
-        </WrapItem>
-        <WrapItem>
-          <Button colorScheme='gray' variant='outline'>
-            REST APIs
-          </Button>
-        </WrapItem>
-        <WrapItem>
-          <Button colorScheme='gray' variant='outline'>
-            TailwindCSS
-          </Button>
-        </WrapItem>
-        <WrapItem>
-          <Button colorScheme='gray' variant='outline'>
-            MongoDB
-          </Button>
-        </WrapItem>
-        <WrapItem>
-          <Button colorScheme='gray' variant='outline'>
-            GraphQL
-          </Button>
-        </WrapItem>
+        {topics.map((t) => (
+          <WrapItem key={t}>
+            <Link to={`/blogs?category=${t}`}>
+              <Button
+                colorScheme='twitter'
+                variant={
+                  searchParams.get('category') === t ? 'solid' : 'outline'
+                }
+              >
+                {t}
+              </Button>
+            </Link>
+          </WrapItem>
+        ))}
       </Wrap>
     </Box>
   );

@@ -1,5 +1,6 @@
 import { Box, Container, Flex, Grid, Spinner, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import BlogCard from '../components/BlogCard';
 import Navbar from '../components/Navbar';
 import Topics from '../components/Topics';
@@ -16,12 +17,13 @@ const Blogs = () => {
     state: { blogs, loading, error },
     dispatch,
   } = useBlogs();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     (async () => {
       dispatch(getBlogsStart());
       try {
-        let res = await getAllBlogs();
+        let res = await getAllBlogs(searchParams.get('category'));
 
         if (res.status === 200) {
           dispatch(getBlogsSuccess(res.data.data));
@@ -31,7 +33,7 @@ const Blogs = () => {
         dispatch(getBlogsFailed(err.response.data.error));
       }
     })();
-  }, [dispatch]);
+  }, [dispatch, searchParams]);
 
   if (loading) {
     return (
@@ -59,10 +61,11 @@ const Blogs = () => {
           Recent blogs
         </Text>
 
-        <Box display={{ base: 'block', sm: 'block', md: 'flex' }} gap='8'>
+        <Box display={{ base: 'block', md: 'flex' }} gap='8'>
           <Grid
             templateColumns={{
               base: 'repeat(1,1fr)',
+              sm: 'repeat(2,1fr)',
               md: 'repeat(2, 1fr)',
             }}
             gap={6}
