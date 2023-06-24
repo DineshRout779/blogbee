@@ -6,14 +6,58 @@ import {
   Input,
   Text,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
 import ButtonSolid from '../components/common/ButtonSolid';
 import Logo from '../components/Logo';
+import { useAuth } from '../hooks/useAuth';
+import { signupService } from '../services/lib/auth';
 
 const bgImg =
   'url("https://images.pexels.com/photos/4348401/pexels-photo-4348401.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")';
 
 const Signup = () => {
+  const {
+    state: { user },
+  } = useAuth();
+  const navigate = useNavigate();
+  const [formValues, setFormValues] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+  const { username, email, password } = formValues;
+
+  const handlleInputChange = (e) => {
+    setFormValues({
+      ...formValues,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await signupService({ username, email, password });
+
+      // console.log(res);
+
+      if (res.status === 201) {
+        toast.success('Signup successful!');
+        navigate('/login');
+      }
+    } catch (err) {
+      console.log(err.response);
+      toast.error(err.response.data.error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) navigate('/');
+  }, [user, navigate]);
+
   return (
     <Flex minH={'100vh'} justifyContent={'center'} alignItems='center'>
       <Box flex={{ base: '1', md: '0.3' }} p='2em'>
@@ -22,21 +66,39 @@ const Signup = () => {
           Let&apos;s get started!
         </Text>
 
-        <Box as={'form'} my={'2em'} maxW='420px'>
+        <Box as={'form'} my={'2em'} maxW='420px' onSubmit={handleFormSubmit}>
           {/* name */}
           <FormControl my='4'>
             <FormLabel>Full Name</FormLabel>
-            <Input type='text' placeholder='Enter your full name' />
+            <Input
+              type='text'
+              name='username'
+              value={username}
+              onChange={handlleInputChange}
+              placeholder='Enter your full name'
+            />
           </FormControl>
           {/* email */}
           <FormControl my='4'>
             <FormLabel>Email address</FormLabel>
-            <Input type='email' placeholder='Enter your email' />
+            <Input
+              type='email'
+              name='email'
+              value={email}
+              onChange={handlleInputChange}
+              placeholder='Enter your email'
+            />
           </FormControl>
           {/* password */}
           <FormControl my='4'>
             <FormLabel>Password</FormLabel>
-            <Input type='password' placeholder='Enter your password' />
+            <Input
+              type='password'
+              name='password'
+              value={password}
+              onChange={handlleInputChange}
+              placeholder='Enter your password'
+            />
           </FormControl>
 
           <ButtonSolid type='submit' mt='1em' w='full'>
