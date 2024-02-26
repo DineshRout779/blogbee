@@ -96,17 +96,22 @@ const Navbar = () => {
               gap='1em'
               display={{ base: 'none', md: 'none', lg: 'flex' }}
             >
-              <Link to='/popular'>
+              <Link to='/blogs'>
+                <Text fontSize={'lg'} p='3'>
+                  Blogs
+                </Text>
+              </Link>
+              <Link to='/blogs/popular'>
                 <Text fontSize={'lg'} p='3'>
                   Popular
                 </Text>
               </Link>
-              <Link to='/reading-list'>
+              <Link to='/blogs/reading-list'>
                 <Text fontSize={'lg'} p='3'>
                   Reading list
                 </Text>
               </Link>
-              <Link to='/topics'>
+              <Link to='/blogs/topics'>
                 <Text fontSize={'lg'} p='3'>
                   Topics
                 </Text>

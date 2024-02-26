@@ -1,5 +1,11 @@
+import Navbar from '../components/Navbar';
+
 const ApiDocs = () => {
-  return <div>ApiDocs</div>;
+  return (
+    <div>
+      <Navbar />
+    </div>
+  );
 };
 
 export default ApiDocs;

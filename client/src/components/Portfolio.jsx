@@ -32,15 +32,16 @@ const Portfolio = () => {
         Having trouble sharing your blogs in your portfolio? CodeTales provide
         rich APIs which can be integrated with your site.
       </Text>
-      <Link to='/posts'>
+      <Link to='/api-docs'>
         <Button
           color={'#5186e0'}
           bg='#fff'
-          variant='solid'
+          variant='link'
           _hover={{
             opacity: 0.9,
           }}
           size='lg'
+          p={4}
         >
           View the Docs
         </Button>

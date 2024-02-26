@@ -16,10 +16,16 @@ const Footer = () => {
             Links
           </Text>
           <Link to='/about'>About</Link>
-          <Link to='/about'>Features</Link>
-          <Link to='/about'>Contact</Link>
+          <Link to='/api-docs'>API docs</Link>
+          <Link to='/contact'>Contact</Link>
         </VStack>
-        <Box flex={0.3}></Box>
+        <VStack spacing='3' p='4' flex='0.3' align={'left'}>
+          <Text as='h2' fontWeight={'semibold'} fontSize='xl'>
+            Links
+          </Text>
+          <Link to='/popular'>Popular</Link>
+          <Link to='/reading-list'>Reading list</Link>
+        </VStack>
       </Flex>
     </Container>
   );
