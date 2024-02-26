@@ -11,20 +11,21 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Navbar from '../components/Navbar';
 import { useAuth } from '../hooks/useAuth';
 import { getBlog, incrementViews } from '../services/lib/blog';
-import { Remarkable } from 'remarkable';
+import ReactMarkdown from 'react-markdown';
+import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 
-const md = new Remarkable();
-
-function renderMarkdownToHTML(markdown) {
-  // This is ONLY safe because the output HTML
-  // is shown to the same user, and because you
-  // trust this Markdown parser to not have bugs.
-  const renderedHTML = md.render(markdown);
-  return { __html: renderedHTML };
-}
+const newTheme = {
+  p: (props) => {
+    const { children } = props;
+    return (
+      <Text mb={2} fontSize={'12px'}>
+        {children}
+      </Text>
+    );
+  },
+};
 
 const Blog = () => {
   const {
@@ -78,7 +79,6 @@ const Blog = () => {
 
   return (
     <Box>
-      <Navbar />
       <Container maxW={'1200px'} minH={'100vh'} mt='8' pb='8'>
         <Flex gap='8' flexDir={{ base: 'column', md: 'row' }}>
           <Box flex={{ base: 1, md: 1 }} maxW='960px' m='auto'>
@@ -129,7 +129,6 @@ const Blog = () => {
             >
               {blog.description}
             </Text>
-
             <Flex
               gap='4'
               my='2'
@@ -148,11 +147,14 @@ const Blog = () => {
                 {new Date(blog.createdAt).toDateString()}
               </Text>
             </Flex>
-
-            <Box
+            <ReactMarkdown components={ChakraUIRenderer(newTheme)} skipHtml>
+              {blog.content}
+            </ReactMarkdown>
+            ;
+            {/* <Box
               className='blog'
               dangerouslySetInnerHTML={renderMarkdownToHTML(blog.content)}
-            ></Box>
+            ></Box> */}
           </Box>
 
           {/* <Box flex='0.3' h='fit-content' className='sticky sidebar'>
