@@ -1,7 +1,11 @@
 const User = require('../models/User');
 const Post = require('../models/Post');
 const bcrypt = require('bcrypt');
+const { v4: uuidv4 } = require('uuid');
 
+/**
+ * UPDATE User By Id
+ */
 exports.updateUserById = async (req, res) => {
   if (req.body.password) {
     const salt = await bcrypt.genSalt(10);
@@ -28,6 +32,9 @@ exports.updateUserById = async (req, res) => {
   }
 };
 
+/**
+ * DELETE User By Id
+ */
 exports.deleteUserById = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
@@ -50,7 +57,11 @@ exports.deleteUserById = async (req, res) => {
   }
 };
 
+/**
+ * GET User by Id
+ */
 exports.getUserById = async (req, res, next, id) => {
+  console.log('ehere..');
   try {
     let user = await User.findById(id);
     if (!user) {
@@ -69,7 +80,62 @@ exports.getUserById = async (req, res, next, id) => {
   }
 };
 
+/**
+ * GET User
+ */
 exports.getUser = (req, res) => {
   req.profile.password = undefined;
   return res.json(req.profile);
+};
+
+/**
+ * Create API key
+ */
+exports.createApiKey = async (req, res) => {
+  try {
+    const newApiKey = uuidv4();
+    await User.findByIdAndUpdate(
+      req.profile._id,
+      {
+        $push: { apiKeys: newApiKey },
+      },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      status: true,
+      message: 'API Key generated',
+      apiKey: newApiKey,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      status: false,
+      error: err,
+    });
+  }
+};
+
+/**
+ * DELETE API Key
+ */
+exports.deleteApiKey = async (req, res) => {
+  try {
+    const apiKey = req.body.apiKey;
+    await User.findByIdAndUpdate(
+      req.profile._id,
+      {
+        $pull: { apiKeys: apiKey },
+      },
+      { new: true }
+    );
+    return res.status(200).json({
+      success: true,
+      message: 'API Key deleted',
+    });
+  } catch (err) {
+    return res.status(500).json({
+      status: false,
+      error: err,
+    });
+  }
 };

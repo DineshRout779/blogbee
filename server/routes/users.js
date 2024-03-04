@@ -4,6 +4,8 @@ const {
   deleteUserById,
   getUserById,
   getUser,
+  createApiKey,
+  deleteApiKey,
 } = require('../controllers/users');
 const {
   verifyTokenAndAuthorization,
@@ -30,5 +32,11 @@ router.delete(
 
 // get user
 router.get('/:userId', getUser);
+
+// Create API key
+router.put('/apiKey/:userId', createApiKey);
+
+// Delete API key
+router.delete('/apiKey/:userId', deleteApiKey);
 
 module.exports = router;

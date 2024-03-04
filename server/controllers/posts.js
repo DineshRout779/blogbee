@@ -150,3 +150,25 @@ exports.deletePostById = async (req, res) => {
     });
   }
 };
+
+/**
+ * GET User Posts for Portfolio
+ */
+exports.getPortfolioPosts = async (req, res) => {
+  try {
+    const posts = await Post.find({ userId: req.user._id });
+
+    return res.status(200).json({
+      success: true,
+      message: 'User blogs fetched successfully',
+      blogs: posts,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message,
+    });
+  }
+};

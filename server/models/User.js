@@ -20,6 +20,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    apiKeys: [{ type: String }],
   },
   { timestamps: true }
 );

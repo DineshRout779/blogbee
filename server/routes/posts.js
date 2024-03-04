@@ -7,8 +7,11 @@ const {
   deletePostById,
   getPost,
   updatePostViews,
+  getPortfolioPosts,
 } = require('../controllers/posts');
 const { getUserById } = require('../controllers/users');
+const { blogsLimiter } = require('../middlewares/rateLimiter');
+const verifyApiKey = require('../middlewares/verifyApiKey');
 const {
   verifyTokenAndAuthorization,
   verifyToken,
@@ -44,5 +47,7 @@ router.delete(
   verifyTokenAndAuthorization,
   deletePostById
 );
+
+router.get('/:userId/portfolio', verifyApiKey, blogsLimiter, getPortfolioPosts);
 
 module.exports = router;
