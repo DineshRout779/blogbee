@@ -2,8 +2,12 @@ import { Container, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import ButtonSolid from './common/ButtonSolid';
 import ButtonOutline from './common/ButtonOutline';
+import { useAuth } from '../hooks/useAuth';
 
 const Hero = () => {
+  const {
+    state: { user },
+  } = useAuth();
   const textColor = useColorModeValue('blackAlpha.800', 'whiteAlpha.600');
   return (
     <Container maxWidth={'1200px'} w='full'>
@@ -45,7 +49,7 @@ const Hero = () => {
               Explore Blogs
             </ButtonOutline>
           </Link>
-          <Link to='/signup'>
+          <Link to={user ? '/blogs' : '/signup'}>
             <ButtonSolid size='lg' w='240px'>
               Get started
             </ButtonSolid>
