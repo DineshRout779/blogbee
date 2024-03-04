@@ -248,14 +248,18 @@ const Navbar = () => {
 
             {user ? (
               <Box p='3'>
-                <Flex gap='2' mb='4' alignItems={'center'}>
-                  <Avatar
-                    name='Dan Abrahmov'
-                    size='md'
-                    src='https://bit.ly/dan-abramov'
-                  />
-                  <Text fontSize={'lg'}>Profile</Text>
-                </Flex>
+                <Link to='/profile'>
+                  <Flex gap='4' mb='4' alignItems={'center'}>
+                    <Avatar
+                      name='Dan Abrahmov'
+                      size='md'
+                      src='https://bit.ly/dan-abramov'
+                    />
+                    <Text fontSize={'lg'} textTransform={'capitalize'}>
+                      {user.username}
+                    </Text>
+                  </Flex>
+                </Link>
                 <Button
                   width={'100%'}
                   borderColor='#5186e0'

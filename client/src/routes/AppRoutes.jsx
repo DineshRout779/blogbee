@@ -14,6 +14,7 @@ import { AnimatePresence } from 'framer-motion';
 import AnimatedPage from '../components/AnimatedPage';
 import BlogList from '../components/BlogList';
 import Blogs from '../pages/Blogs';
+import Profile from '../pages/Profile';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: 'signup',
         element: <Signup />,
+      },
+      {
+        path: 'profile',
+        element: <Profile />,
       },
       {
         path: 'blogs',
