@@ -16,17 +16,6 @@ import { getBlog, incrementViews } from '../services/lib/blog';
 import ReactMarkdown from 'react-markdown';
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 
-const newTheme = {
-  p: (props) => {
-    const { children } = props;
-    return (
-      <Text mb={2} fontSize={'12px'}>
-        {children}
-      </Text>
-    );
-  },
-};
-
 const Blog = () => {
   const {
     state: { user },
@@ -147,7 +136,7 @@ const Blog = () => {
                 {new Date(blog.createdAt).toDateString()}
               </Text>
             </Flex>
-            <ReactMarkdown components={ChakraUIRenderer(newTheme)} skipHtml>
+            <ReactMarkdown components={ChakraUIRenderer()} skipHtml>
               {blog.content}
             </ReactMarkdown>
             ;

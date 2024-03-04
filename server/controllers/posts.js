@@ -43,6 +43,7 @@ exports.createPost = async (req, res) => {
 
     res.status(200).json(savedPost);
   } catch (error) {
+    console.log('errrrr: ', error);
     res.status(500).json({
       status: false,
       error,
